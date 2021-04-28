@@ -1,0 +1,122 @@
+<style>
+    .calamity {
+        font-family: 'Calamity'
+    }
+    
+    container {
+        right: 0px;
+        position: fixed;
+    }
+    .blue {
+        position: absolute;
+        right: 70px;
+        -webkit-text-stroke: 1px #1a7ce2;
+        color: white;
+        font-size: 30px;
+    }
+
+    .image-cropper {
+        right: 10px;
+        top: 30px;
+        position: fixed;
+        vertical-align: central;
+        display: inline;
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 100%;
+    }
+    .flyout {
+        animation: flyout 4s;  
+    }
+    @keyframes flyout {
+        
+        0% {
+            display: inline-block;
+            clip-path: inset(0px 0% 0px 0px);
+            -webkit-text-stroke: 1px #1a7ce2;
+        }
+        10% {
+            -webkit-text-stroke: 1px #f5a338;
+            display: inline-block;
+            clip-path: inset(0px 0px 0px 0px);
+        }
+        
+        25% {
+            -webkit-text-stroke: 1px #f5a338;
+            display: inline-block;
+            clip-path: inset(0px 100% 0px 0px);
+            /*-webkit-transform: translateY(0%)*/
+        }
+        50% {
+            display: inline-block;
+            clip-path: inset(0px 100% 0px 0px);
+        }
+        80% {
+            -webkit-text-stroke: 1px #f5a338;
+            display: inline-block;
+            clip-path: inset(0px 0px 0px 0px);
+        }/*
+        90% {
+            -webkit-text-stroke: 1px #f5a338;
+            display: inline-block;
+            clip-path: inset(0px 0px 0px 0px);
+        }*/
+        100% {
+            -webkit-text-stroke: 1px #1a7ce2;
+            display: inline-block;
+            clip-path: inset(0px 0px 0px 0px);
+        }
+    }
+</style>
+<div id="container">
+    <p class="calamity blue">
+        Latest follow: <span id="follow">Komali09</span>
+        <video id="vid" class="image-cropper" controls="false" src="./sensor.mov" onended="reset()"></video>
+    </p>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/tempscript.js"></script>
+<script>
+    socket = io()
+    socket.on("eval", func => {
+        eval(func)
+    })
+    var vid = document.getElementById("vid")
+    window.onload = function () {
+
+        document.getElementById("follow").innerHTML = initName
+        vid.removeAttribute("controls")
+
+    }
+    var followStr = document.getElementById("follow")//
+    setInterval(() => {
+        document.getElementById("follow").innerHTML = followStr.innerHTML//vid.currentTime
+    }, 1)
+    function play() {
+        var vid = document.getElementById("vid")
+        vid.currentTime = 0
+        vid.play()
+        var i = 0;
+        
+        
+
+
+    }
+    socket.on("userFollow", name => {newFollow(name)})
+    function newFollow(name) {
+        followStr.classList.add("flyout")
+        setTimeout(() => {followStr.innerHTML = name}, 2000)
+        setTimeout(() => { followStr.classList.remove("flyout") }, 4000)
+//        followStr.innerHTML = name
+        play()
+    }
+    
+
+    function reset() {
+        var vid = document.getElementById("vid")
+
+        vid.currentTime = 0
+    }
+</script>
